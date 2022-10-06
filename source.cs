@@ -23,7 +23,7 @@ public class App
     private bool end = false;
     private char dir = '►';
     private char _dir;
-    private int score = 6;
+    private int score = 5;
 
     public App(){
         Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -69,13 +69,13 @@ public class App
                 map.Add("▐                                ▌");
                 map.Add("▐   -------     ▌                ▌");
                 map.Add("▐               ▌                ▌");
-                map.Add("▐               ▌            .   ▌");
+                map.Add("▐               ▌                ▌");
                 map.Add("▐                                ▌");
                 map.Add(" ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
                 break;
             }
         }
-        
+
         foreach (string data in map)
         {
             Console.WriteLine(data);
@@ -114,7 +114,8 @@ public class App
         snake.Add(new Player('O', x-2, y));
         snake.Add(new Player('O', x-3, y));
         snake.Add(new Player('O', x-4, y));
-        snake.Add(new Player('O', x-5, y));
+        
+        Player food = new Player('.', x+1, y);
 
         char[] rules = {
             '▌',
@@ -123,11 +124,11 @@ public class App
             '▄',
             '-'
         };
-
+        
         while (!end)
         {
             drawState = true;
-            
+
             foreach (Player data in snake)
             {
                 Console.SetCursorPosition(data._x,data._y);
@@ -161,10 +162,33 @@ public class App
                 }
             }
                 
-            if (map[y][x] == '.')
-            {    
+            if (x == food._x && y == food._y)
+            {   
+                bool oc = false;
+
+                while (!oc)
+                {
+                    oc = true;
+                    Random rnd = new Random();
+
+                    food._x = rnd.Next(1,34);
+                    food._y = rnd.Next(1,10);
+
+                    foreach (Player data in snake)
+                    {
+                        if (data._x == food._x && data._y == food._y)
+                            oc = false;
+                    }
+
+                    if (map[food._y][food._x] != ' ')
+                        oc = false;
+                }
+
                 snake.Add(new Player('O', x-score, y));
                 score++;
+
+                Console.SetCursorPosition(0, map.Count);
+                Console.Write("Score: {0}", score-6);
             }
 
             for (int k = (snake.Count-1); k > 0; k--)
@@ -182,6 +206,9 @@ public class App
                 Console.SetCursorPosition(snake[k]._x,snake[k]._y);
                 Console.Write(snake[k].sprite);
 
+                Console.SetCursorPosition(food._x,food._y);
+                Console.Write(food.sprite);
+
                 if (snake[k].sprite != dir && x == snake[k]._x && y == snake[k]._y)
                     end = true;
             }
@@ -192,10 +219,10 @@ public class App
                     end = true;
             }
 
-            Console.SetCursorPosition(0,30);
-            
-            drawState = false;
             _dir = dir;
+            Console.SetCursorPosition(0,30);
+            drawState = false;
+
             Thread.Sleep(200);
         }
     
