@@ -63,13 +63,13 @@ public class App
             {
                 map.Add(" ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄ ");
                 map.Add("▐                                ▌");
-                map.Add("▐                     ------     ▌");
-                map.Add("▐               ▌                ▌");
-                map.Add("▐               ▌                ▌");
+                map.Add("▐                     ══════     ▌");
+                map.Add("▐               █                ▌");
+                map.Add("▐               █                ▌");
                 map.Add("▐                                ▌");
-                map.Add("▐   -------     ▌                ▌");
-                map.Add("▐               ▌                ▌");
-                map.Add("▐               ▌                ▌");
+                map.Add("▐   ═══════     █                ▌");
+                map.Add("▐               █                ▌");
+                map.Add("▐               █                ▌");
                 map.Add("▐                                ▌");
                 map.Add(" ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
                 break;
@@ -115,14 +115,15 @@ public class App
         snake.Add(new Player('O', x-3, y));
         snake.Add(new Player('O', x-4, y));
         
-        Player food = new Player('.', x+1, y);
+        Player food = new Player('•', x+1, y);
 
         char[] rules = {
             '▌',
             '▐',
             '▀',
             '▄',
-            '-'
+            '═',
+            '█'
         };
         
         while (!end)
@@ -206,9 +207,6 @@ public class App
                 Console.SetCursorPosition(snake[k]._x,snake[k]._y);
                 Console.Write(snake[k].sprite);
 
-                Console.SetCursorPosition(food._x,food._y);
-                Console.Write(food.sprite);
-
                 if (snake[k].sprite != dir && x == snake[k]._x && y == snake[k]._y)
                     end = true;
             }
@@ -218,6 +216,9 @@ public class App
                 if (map[y][x] == rule)
                     end = true;
             }
+            
+            Console.SetCursorPosition(food._x,food._y);
+            Console.Write(food.sprite);
 
             _dir = dir;
             Console.SetCursorPosition(0,30);
